@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            color: skyblue;
+            background-color: greenyellow;
+        }
+
+        .pitch {
+            margin: 10px 0;
+            font-size: 16px;
+            color: skyblue;
+
+        }
+
+        .pitch span {
+            margin-right: 5px;
+        }
+
+        .begin {
+            margin-bottom: 5px;
+        }
+
+        .begin button {
+            background-color: greenyellow;
+        }
+
+        .begin #interval {
+            background-color: orange;
+        }
+
+        .monicker ul .li {
+            float: left;
+            width: 103px;
+            height: 50px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            background-color: #333;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+        }
+
+        .monicker ul .pitchs {
+            background-color: greenyellow;
+            color: #333;
+        }
+
+        .monicker ul .pitchss {
+            background-color: greenyellow;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>点名系统</h1>
+    <div class="pitch">
+        <span>被选中的伙伴：</span>
+    </div>
+    <div class="begin">
+        <button>开始</button>
+        <span>时间：</span>
+        <select id="interval">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10" selected>10</option>
+        </select>
+    </div>
+    <div class="monicker">
+        <ul>
+
+        </ul>
+    </div>
+    <script>
+        const ul = document.querySelector('.monicker ul')
+        const btn = document.querySelector('.begin button')
+
+        let stuName = `王恒达 陈德明 吴佩阳 卢增年 周裕腾 李树鹏 巫斌斌 冯禹锋 黄伟轩 张永豪 何磊 黄润杰 尹可怡 林艳平 李超龙 黄东军 胡镇涛 李斌 曾林尉 刘洪盛 彭彪歌 宋家贵 苏家兴 谢自强 王润青 叶晓银 洪伟锋 陈婉桦 叶远航 罗锦活 肖坚镝 梁祺星 王佳丽 邱烽城 黄梓栋 连梓豪 聂嘉宏 黎子弘 刘毓湖 肖耀 彭炎 罗健法 张莹莹 黎金 陈实 陈爽爽 符群望 王淇 张观乐 谭嘉萌 李家豪 曾最祥 朱万旺 李耿佳 陈来弟 刘岩 陈柏荣 郑杰滨 史洁祥 宋紫凝 罗雅淇 王文倩 曹佳 余先城 柯庆翔 陈守驰 陈曜 陈东燕 张福民 陈达雄 诸俊洋 谷彦豪 区纪浩 陈观炎 房瞬峰 王治平 丘益振 吴泰琼 余佳龙 林观信 温永芳 李伟锋 彭垚 廖湘 冯祥标 庾荣发 崔福满 陈丹霞 苏文元 翁燕虹 漆天文 刘水兵 高航 钟贵辉 聂成林 朱鑫`.split(' ')
+
+        // 渲染数据到页面
+        for (let i = 0; i < stuName.length; i++) {
+            // 创建li标签存放名字
+            let li = document.createElement('li')
+            li.classList.add('li')
+            li.innerText = stuName[i]
+            // 把li添加到ul标签,添加到页面上
+            ul.appendChild(li)
+        }
+        // 获取所有的li
+        let liList = document.querySelectorAll('.monicker li')
+        liList = domToArr(liList)
+        // 添加点击事件
+        btn.addEventListener('click', () => {
+            let index
+            // 获取用户选择的随机时间
+            let sm = document.querySelector('#interval').value
+            // 添加定时器随机点名
+            let timeId = setInterval(() => {
+                // 去除上一个的颜色
+                let lis = document.querySelector('.monicker .pitchs')
+                if (lis) {
+                    lis.classList.remove('pitchs')
+                }
+                // 获得随机数
+                index = Math.round(Math.random() * (stuName.length - 1))
+                // 然对应的li标签获得相应的颜色
+                liList[index].classList.add('pitchs')
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(timeId)
+                liList[index].classList.add('pitchss')
+                const span = document.querySelector('.pitch span')
+                span.innerText += ' ' + stuName[index]
+                // 删除数组里已选择的数据
+                stuName.splice(index, 1)
+                // 删除界面上选中的
+                liList.splice(index, 1)
+            }, 1000 * sm);
+
+
+        })
+        // 定义一个函数 负责将伪数组 转成真正的数组
+        function domToArr (domList) {
+            // 定义一个空数组
+            const arr = [];
+            // 对伪数组进行遍历
+            for (let index = 0; index < domList.length; index++) {
+                arr.push(domList[index])
+
+            }
+            return arr
+        }
+    </script>
+</body>
+
+</html>
